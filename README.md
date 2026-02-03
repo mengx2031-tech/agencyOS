@@ -38,8 +38,8 @@ agencyOS/
 
 ## 特工头像
 
-- **命名约定**：将头像图片命名为 `{agent-id}.png` 放入 `assets/` 目录，例如 `agent-1.png`、`agent-2.png`
-- **注意**：请使用小写 `.png` 扩展名，GitHub Pages 部署在 Linux 服务器上，路径区分大小写
+- **命名约定**：将头像图片命名为 `{agent-id}.png` 或 `{agent-id}.PNG` 放入 `assets/` 目录，例如 `agent-1.png`
+- **GitHub Pages**：若使用 `.PNG` 扩展名，请确保提交到仓库的文件名与代码请求一致（当前默认请求 `.PNG`）
 - **自定义路径**：也可在 `statuses.json` 中为特工添加 `"profilePic": "assets/自定义路径.png"` 覆盖默认
 
 ## 数据更新
