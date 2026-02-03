@@ -707,6 +707,127 @@
       line-height: 1.5;
     }
 
+    .reference-section {
+      margin-bottom: 1rem;
+    }
+
+    .ref-block {
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .ref-block.异常 {
+      border-color: rgba(46, 77, 146, 0.5);
+      box-shadow: 0 0 8px rgba(46, 77, 146, 0.2);
+    }
+
+    .ref-block.异常 .ref-block-title {
+      background: rgba(46, 77, 146, 0.2);
+      color: var(--arc-anomaly);
+      padding: 0.5rem 0.75rem;
+      text-shadow: 0 0 6px rgba(46, 77, 146, 0.4);
+    }
+
+    .ref-block.异常 .ref-item summary {
+      color: var(--arc-anomaly);
+    }
+
+    .ref-block.现实 {
+      border-color: rgba(218, 165, 32, 0.5);
+      box-shadow: 0 0 8px rgba(218, 165, 32, 0.2);
+    }
+
+    .ref-block.现实 .ref-block-title {
+      background: rgba(218, 165, 32, 0.15);
+      color: var(--arc-reality);
+      padding: 0.5rem 0.75rem;
+      text-shadow: 0 0 6px rgba(218, 165, 32, 0.4);
+    }
+
+    .ref-block.现实 .ref-item summary {
+      color: var(--arc-reality);
+    }
+
+    .ref-block.职能 {
+      border-color: rgba(196, 30, 58, 0.5);
+      box-shadow: 0 0 8px var(--glow-red-soft);
+    }
+
+    .ref-block.职能 .ref-block-title {
+      background: rgba(196, 30, 58, 0.15);
+      color: var(--arc-competency);
+      padding: 0.5rem 0.75rem;
+      text-shadow: 0 0 6px var(--glow-red-soft);
+    }
+
+    .ref-block.职能 .ref-item summary {
+      color: var(--arc-competency);
+    }
+
+    .ref-block-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .ref-item {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 0.35rem 0.75rem 0.35rem;
+      overflow: hidden;
+    }
+
+    .ref-item:first-of-type {
+      margin-top: 0.35rem;
+    }
+
+    .ref-item:last-child {
+      margin-bottom: 0.75rem;
+    }
+
+    .ref-item summary {
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      list-style: none;
+    }
+
+    .ref-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .ref-item summary::before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 5px solid currentColor;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+      transition: transform 0.2s;
+    }
+
+    .ref-item[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .ref-item-desc {
+      padding: 0 0.75rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .ref-block > .ref-item-desc {
+      margin: 0.35rem 0.75rem 0.75rem;
+    }
+
     .item-card {
       background: var(--bg-dark);
       border-radius: 4px;
@@ -937,6 +1058,55 @@
 
     let allAgents = [];
 
+    function buildRefAnomalyHtml(agent) {
+      const abilities = agent.arc?.异常?.abilities || [];
+      if (abilities.length === 0) return '<div class="ref-item-desc">无</div>';
+      return abilities.map(ab => `
+        <details class="ref-item">
+          <summary>${escapeHtml(ab.name || '')}</summary>
+          <div class="ref-item-desc">${escapeHtml(ab.description || '')}</div>
+        </details>
+      `).join('');
+    }
+
+    function buildRefRealityHtml(agent) {
+      const arc = agent.arc?.现实;
+      if (!arc) return '<div class="ref-item-desc">无</div>';
+      let html = '';
+      if (arc.现实触发器) {
+        html += `<details class="ref-item">
+          <summary>${escapeHtml(arc.现实触发器.name || '')}</summary>
+          <div class="ref-item-desc">${escapeHtml(arc.现实触发器.description || '')}</div>
+        </details>`;
+      }
+      if (arc.过载解除) {
+        html += `<details class="ref-item">
+          <summary>${escapeHtml(arc.过载解除.name || '')}</summary>
+          <div class="ref-item-desc">${escapeHtml(arc.过载解除.description || '')}</div>
+        </details>`;
+      }
+      return html || '<div class="ref-item-desc">无</div>';
+    }
+
+    function buildRefCompetencyHtml(agent) {
+      const arc = agent.arc?.职能;
+      if (!arc) return '<div class="ref-item-desc">无</div>';
+      let html = '';
+      if (arc.首要指令) {
+        html += `<details class="ref-item">
+          <summary>${escapeHtml(arc.首要指令.name || '')}</summary>
+          <div class="ref-item-desc">${escapeHtml(arc.首要指令.description || '')}</div>
+        </details>`;
+      }
+      if (arc.许可行为 && arc.许可行为.length) {
+        html += `<details class="ref-item">
+          <summary>许可行为</summary>
+          <div class="ref-item-desc">${arc.许可行为.map(p => '• ' + escapeHtml(p)).join('\n')}</div>
+        </details>`;
+      }
+      return html || '<div class="ref-item-desc">无</div>';
+    }
+
     function renderAgent(agent) {
       const arc = agent.arc || {};
       const arcLabels = [
@@ -1011,6 +1181,20 @@
             <div class="section">
               <div class="section-title">资质保证 (QA)</div>
               <div class="qa-grid">${qaHtml}</div>
+            </div>
+            <div class="reference-section">
+              <div class="ref-block 异常">
+                <div class="ref-block-title">异常 — ${escapeHtml(arc.异常?.choice || '—')}</div>
+                ${buildRefAnomalyHtml(agent)}
+              </div>
+              <div class="ref-block 现实">
+                <div class="ref-block-title">现实 — ${escapeHtml(arc.现实?.choice || '—')}</div>
+                ${buildRefRealityHtml(agent)}
+              </div>
+              <div class="ref-block 职能">
+                <div class="ref-block-title">职能 — ${escapeHtml(arc.职能?.choice || '—')}</div>
+                ${buildRefCompetencyHtml(agent)}
+              </div>
             </div>
             ${itemsHtml ? `
             <div class="section">
