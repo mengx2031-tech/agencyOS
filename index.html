@@ -839,13 +839,13 @@
       height: 24px;
       border: 2px solid var(--arc-reality);
       border-radius: 50%;
-      background: var(--bg-dark);
+      background: var(--arc-reality);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.7rem;
       font-weight: 700;
-      color: var(--text-secondary);
+      color: white;
     }
 
     .reality-split-tracker .tracker-end.failed {
@@ -1210,7 +1210,7 @@
         if (i < 4) steps += '<div class="tracker-connector"></div>';
       }
       steps += '<div class="tracker-connector"></div>';
-      steps += `<div class="tracker-end${n >= 4 ? ' failed' : ''}">${n >= 4 ? '✕' : ''}</div>`;
+      steps += `<div class="tracker-end${n >= 4 ? ' failed' : ''}">✕</div>`;
       return `<div class="reality-split-tracker">${steps}</div>`;
     }
 
