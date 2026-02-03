@@ -284,14 +284,30 @@
       padding: 0.5rem 0;
     }
 
-    .gm-profile img {
-      width: 100%;
-      max-width: 140px;
-      height: auto;
+    .gm-profile-frame {
+      display: inline-block;
       border-radius: 50%;
-      border: 2px solid var(--border);
+      overflow: hidden;
       box-shadow: 0 0 15px var(--glow-red-soft);
+    }
+
+    .gm-profile-frame img {
+      display: block;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
       object-fit: cover;
+      box-shadow: inset 0 0 0 3px #000;
+    }
+
+    .gm-profile-frame .gm-profile-placeholder {
+      display: flex;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0;
+      border: none;
+      box-shadow: inset 0 0 0 3px #000;
     }
 
     .gm-info {
@@ -886,11 +902,13 @@
       <div class="sidebar-section">
         <div class="sidebar-title">机构总经理</div>
         <div class="gm-profile">
-          <img src="assets/gm-profile.png" alt="机构总经理"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-          <div class="gm-profile-placeholder"
-            style="display:none; width:140px; height:140px; margin:0 auto; background:var(--bg-dark); border-radius:50%; border:2px solid var(--border); align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.8rem;">
-            请添加 assets/gm-profile.png</div>
+          <div class="gm-profile-frame">
+            <img src="assets/gm-profile.png" alt="机构总经理"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="gm-profile-placeholder"
+              style="display:none; background:var(--bg-dark); align-items:center; justify-content:center; color:var(--text-secondary); font-size:0.8rem;">
+              请添加 assets/gm-profile.png</div>
+          </div>
           <div class="gm-info">
             <div class="gm-info-row"><span class="label">姓名：</span>哈里斯.卡菲.D.威尔斯</div>
             <div class="gm-info-row"><span class="label">AKA：</span>哈里</div>
