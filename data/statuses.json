@@ -150,8 +150,26 @@
               "name": "爱丽丝",
               "actor": "劳伦斯",
               "description": "一个话唠的前同事，超爱分享她的故事",
-              "benefit": "睿智",
-              "benefitDescription": "这个人总是能抢先几步。在您的下一次任务中，您可以在任何时候打电话给他们，从而在危险或潜在悲剧发生前得到警告。",
+              "benefit": "",
+              "benefitDescription": "",
+              "benefitActive": false,
+              "closeness": 3
+            },
+            {
+              "name": "Marcus",
+              "actor": "M",
+              "description": "互有好感。 城市空间设计的顾问。",
+              "benefit": "",
+              "benefitDescription": "",
+              "benefitActive": false,
+              "closeness": 6
+            },
+            {
+              "name": "卢卡斯",
+              "actor": "",
+              "description": "无感。 隔壁花店主理人，一天来3次咖啡厅",
+              "benefit": "",
+              "benefitDescription": "",
               "benefitActive": false,
               "closeness": 3
             }
