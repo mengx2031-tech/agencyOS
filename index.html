@@ -1085,6 +1085,73 @@
       color: white;
     }
 
+    .ref-block.现实 .relationships-section {
+      margin-top: 0.35rem;
+    }
+
+    .ref-block.现实 .relationships-list {
+      padding: 0.35rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .ref-block.现实 .relationship-item {
+      margin: 0.35rem 0 0.35rem 0.5rem;
+      border-left: 2px solid rgba(218, 165, 32, 0.4);
+      flex: 0 0 auto;
+      min-height: 0;
+      overflow: visible;
+    }
+
+    .ref-block.现实 .relationship-item summary {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .ref-block.现实 .relationship-item summary::before {
+      display: none;
+    }
+
+    .ref-block.现实 .relationship-item .relationship-title-left {
+      min-width: 0;
+    }
+
+    .ref-block.现实 .relationship-item .relationship-title-right {
+      flex-shrink: 0;
+    }
+
+    .ref-block.现实 .relationship-content p {
+      margin: 0 0 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .ref-block.现实 .relationship-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ref-block.现实 .relationship-benefit-title {
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .ref-block.现实 .relationship-benefit-title .benefit-label {
+      color: var(--arc-reality);
+    }
+
+    .ref-block.现实 .relationship-actor {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+
     .ref-block.职能 {
       border-color: rgba(196, 30, 58, 0.5);
       box-shadow: 0 0 8px var(--glow-red-soft);
@@ -1592,7 +1659,35 @@
         <summary>割裂进度</summary>
         <div class="ref-item-desc">${buildRealitySplitTrackerHtml(arc.割裂进度 ?? 0)}</div>
       </details>`;
+      html += buildRelationshipsHtml(arc.关系 || []);
       return html || '<div class="ref-item-desc">无</div>';
+    }
+
+    function buildRelationshipsHtml(关系) {
+      if (!关系 || 关系.length === 0) return '';
+      const itemsHtml = 关系.map(rel => {
+        const name = escapeHtml(rel.name || '');
+        const actor = rel.actor ? escapeHtml(rel.actor) : '';
+        const closeness = Math.min(9, Math.max(1, parseInt(rel.closeness, 10) || 0));
+        const activeText = rel.benefitActive ? '已激活' : '未激活';
+        const desc = escapeHtml(rel.description || '');
+        const benefit = escapeHtml(rel.benefit || '');
+        const benefitDesc = escapeHtml(rel.benefitDescription || '');
+        let content = actor ? `<p class="relationship-actor">扮演：${actor}</p>` : '';
+        content += desc ? `<p class="relationship-desc">${desc}</p>` : '';
+        if (benefit || benefitDesc) {
+          content += `<p class="relationship-benefit-title"><span class="benefit-label">连结加成</span>${benefit ? ' — ' + benefit : ''}</p>`;
+          if (benefitDesc) content += `<p class="relationship-benefit-desc">${benefitDesc}</p>`;
+        }
+        return `<details class="ref-item relationship-item">
+          <summary><span class="relationship-title-left">${name} 连结${closeness}</span><span class="relationship-title-right">${activeText}</span></summary>
+          <div class="ref-item-desc relationship-content">${content || '<p>—</p>'}</div>
+        </details>`;
+      }).join('');
+      return `<details class="ref-item relationships-section">
+        <summary>关系</summary>
+        <div class="relationships-list">${itemsHtml}</div>
+      </details>`;
     }
 
     function buildRefCompetencyHtml(agent) {
