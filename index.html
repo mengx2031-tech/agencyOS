@@ -24,6 +24,7 @@
       --arc-anomaly: #2e4d92;
       --arc-reality: #daa520;
       --arc-competency: #c41e3a;
+      --arc-items: #5a4a8a;
       --mvp-color: #c41e3a;
       --reprimand-color: #e67e22;
       --probation-color: #4a5a8a;
@@ -177,10 +178,19 @@
       text-shadow: 0 0 10px var(--glow-red-soft), 0 0 20px var(--glow-red-soft);
     }
 
+    .banner-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      min-width: 0;
+    }
+
     .agent-dropdown-wrap {
       position: relative;
       flex: 1;
       max-width: 280px;
+      min-width: 0;
       z-index: 101;
     }
 
@@ -261,6 +271,147 @@
       accent-color: var(--accent-red);
       cursor: pointer;
       flex-shrink: 0;
+    }
+
+    .items-list-btn {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: 1px solid var(--arc-items);
+      color: var(--arc-items);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .items-list-btn:hover {
+      background: rgba(90, 74, 138, 0.2);
+      box-shadow: 0 0 10px rgba(90, 74, 138, 0.3);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 0 30px var(--glow-red-soft);
+      max-width: 560px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      color: var(--arc-items);
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .items-list-loading {
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .items-list-modal .items-list-item {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+
+    .items-list-modal .items-list-item summary {
+      padding: 0.6rem 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--arc-items);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .items-list-modal .items-list-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .items-list-modal .items-list-item summary::before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 5px solid currentColor;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .items-list-modal .items-list-item[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .items-list-modal .items-list-item .item-price {
+      flex-shrink: 0;
+      color: var(--arc-reality);
+      font-weight: 600;
+    }
+
+    .items-list-modal .items-list-item .item-desc {
+      padding: 0 0.75rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      white-space: pre-line;
     }
 
     /* Main layout: left sidebar + content */
@@ -1140,6 +1291,36 @@
     }
 
     @media (max-width: 768px) {
+      .banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+      }
+
+      .banner-title {
+        flex-shrink: 0;
+      }
+
+      .banner-title h1 {
+        font-size: 1.25rem;
+      }
+
+      .banner-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .agent-dropdown-wrap {
+        max-width: 100%;
+      }
+
+      .items-list-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
+
       .layout {
         flex-direction: column;
       }
@@ -1242,15 +1423,30 @@
       <h1>AgencyOS</h1>
     </div>
     <div class="banner-ecg" aria-hidden="true"></div>
-    <div class="agent-dropdown-wrap">
-      <button class="agent-dropdown-trigger" id="agentDropdownTrigger">
-        <span>选择特工</span>
-        <span class="agent-count" id="agentCount">全部</span>
-        <span class="dropdown-arrow">▼</span>
-      </button>
-      <div class="agent-dropdown-panel" id="agentDropdownPanel"></div>
+    <div class="banner-controls">
+      <div class="agent-dropdown-wrap">
+        <button class="agent-dropdown-trigger" id="agentDropdownTrigger">
+          <span>选择特工</span>
+          <span class="agent-count" id="agentCount">全部</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="agent-dropdown-panel" id="agentDropdownPanel"></div>
+      </div>
+      <button class="items-list-btn" id="itemsListBtn">申领物列表</button>
     </div>
   </header>
+
+  <div class="modal-overlay" id="itemsListModalOverlay">
+    <div class="modal items-list-modal" id="itemsListModal">
+      <div class="modal-header">
+        <h3 class="modal-title">申领物列表</h3>
+        <button class="modal-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" id="itemsListModalBody">
+        <div class="items-list-loading">加载中…</div>
+      </div>
+    </div>
+  </div>
 
   <div class="layout">
     <aside class="sidebar">
@@ -1662,6 +1858,45 @@
         content.innerHTML = `<div class="error">${escapeHtml(err.message)}</div>`;
       }
     }
+
+    function openItemsListModal() {
+      document.getElementById('itemsListModalOverlay').classList.add('open');
+      const bodyEl = document.getElementById('itemsListModalBody');
+      bodyEl.innerHTML = '<div class="items-list-loading">加载中…</div>';
+      fetchJSON('items.json')
+        .then(data => {
+          const items = data?.items || [];
+          if (items.length === 0) {
+            bodyEl.innerHTML = '<div class="items-list-loading">暂无申领物</div>';
+            return;
+          }
+          bodyEl.innerHTML = items.map(item => `
+            <details class="items-list-item">
+              <summary>
+                <span class="item-title">${escapeHtml(item.name || '')}</span>
+                <span class="item-price">${item.price != null ? item.price + ' 嘉奖' : '—'}</span>
+              </summary>
+              <div class="item-desc">${escapeHtml(item.description || '')}</div>
+            </details>
+          `).join('');
+        })
+        .catch(() => {
+          bodyEl.innerHTML = '<div class="items-list-loading">加载失败</div>';
+        });
+    }
+
+    function closeItemsListModal() {
+      document.getElementById('itemsListModalOverlay').classList.remove('open');
+    }
+
+    document.getElementById('itemsListBtn').addEventListener('click', openItemsListModal);
+    document.getElementById('itemsListModalOverlay').addEventListener('click', e => {
+      if (e.target.id === 'itemsListModalOverlay') closeItemsListModal();
+    });
+    document.getElementById('itemsListModal').querySelector('.modal-close').addEventListener('click', closeItemsListModal);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.getElementById('itemsListModalOverlay').classList.contains('open')) closeItemsListModal();
+    });
 
     load();
   </script>
