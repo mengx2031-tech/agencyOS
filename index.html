@@ -844,7 +844,7 @@
 
     .agents-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1.25rem;
     }
 
@@ -1719,7 +1719,7 @@
       }
 
       .agents-grid {
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       }
     }
 
@@ -1739,7 +1739,7 @@
       }
 
       .agents-grid {
-        grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       }
     }
   </style>
@@ -2154,23 +2154,22 @@
       const content = document.getElementById('content');
       const hasSelection = selectedAgentIndices.size > 0;
       const indices = hasSelection ? [...selectedAgentIndices].sort((a, b) => a - b) : allAgents.map((_, i) => i);
-      const agents = indices.map(i => allAgents[i]).filter(Boolean);
+      const agentIndexPairs = indices.map(i => ({ agent: allAgents[i], index: i })).filter(p => p.agent);
 
-      if (agents.length === 0) {
+      if (agentIndexPairs.length === 0) {
         content.innerHTML = '<div class="no-results">暂无特工数据</div>';
         return;
       }
 
       const showTabs = hasSelection && window.matchMedia('(max-width: 768px)').matches;
-      const tabsHtml = showTabs ? indices.map((idx, tabIdx) => {
-        const a = allAgents[idx];
-        const label = a.aka || a.name || '未命名';
-        return `<button type="button" class="agent-tab ${tabIdx === 0 ? 'active' : ''}" data-tab-index="${tabIdx}" data-agent-index="${idx}">${escapeHtml(label)}</button>`;
+      const tabsHtml = showTabs ? agentIndexPairs.map((p, tabIdx) => {
+        const label = p.agent.aka || p.agent.name || '未命名';
+        return `<button type="button" class="agent-tab ${tabIdx === 0 ? 'active' : ''}" data-tab-index="${tabIdx}" data-agent-index="${p.index}">${escapeHtml(label)}</button>`;
       }).join('') : '';
 
-      const cardsHtml = agents.map((agent, i) => {
-        const card = renderAgent(agent);
-        return card.replace('<div class="agent-card">', `<div class="agent-card" data-agent-index="${indices[i]}" data-tab-index="${i}">`);
+      const cardsHtml = agentIndexPairs.map((p, i) => {
+        const card = renderAgent(p.agent);
+        return card.replace('<div class="agent-card">', `<div class="agent-card" data-agent-index="${p.index}" data-tab-index="${i}">`);
       }).join('');
 
       content.innerHTML = `
@@ -2228,7 +2227,7 @@
           newsEl.innerHTML = '<span class="agency-news-placeholder">暂无动态</span>';
         }
 
-        allAgents = data.agents || [];
+        allAgents = Array.isArray(data.agents) ? data.agents : [];
         renderAgentSelect();
         renderContent();
       } catch (err) {
@@ -2297,8 +2296,8 @@
     }
 
     function showMissionDetail(index) {
-      const missions = missionArchiveData.missions || [];
-      const m = missions[index];
+      const missions = Array.isArray(missionArchiveData.missions) ? missionArchiveData.missions : [];
+      const m = missions[parseInt(index, 10)];
       if (!m) return;
       document.getElementById('missionArchiveList').style.display = 'none';
       document.getElementById('missionArchiveDetail').style.display = 'block';
@@ -2328,7 +2327,7 @@
         </div>
         <div class="mission-report-section">
           <div class="mission-report-label">参与者</div>
-          <div class="mission-report-value mission-report-multiline">${escapeHtml((m.参与者 || '—').replace(/\n/g, '<br>'))}</div>
+          <div class="mission-report-value mission-report-multiline">${escapeHtml(m.参与者 || '—').replace(/\n/g, '<br>')}</div>
         </div>
         <div class="mission-report-section mission-report-meta">
           <div class="mission-report-meta-row score 察看期"><span class="score-icon">▣</span><span class="mission-report-field">察看期</span><span>${escapeHtml(m.察看期 || '—')}</span></div>
