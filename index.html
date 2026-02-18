@@ -1348,6 +1348,20 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .arc-tracks-help {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0;
+    }
+    .arc-track-help {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 0.5rem;
+    }
+
     .arc-track {
       margin-bottom: 1rem;
       min-width: 0;
@@ -2508,10 +2522,11 @@
     const BASE = (window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '') || '.') + '/data';
 
     /** Playwall document ref numbers on certain boxes (0-based index) for each track. 30 boxes per track. */
+    /** Playwall refs: key = 0-based box index (user list was 1-based: position 1 = index 0). */
     const WALL_TRACK_REFS = {
-      异常: { 4: 'A3', 9: 'D4', 14: 'G3', 19: 'J3', 24: 'N3' },
-      现实: { 4: 'E3', 9: 'H5', 14: 'X3', 19: 'V2', 24: 'L11' },
-      职能: { 4: 'A3', 9: 'D4', 14: 'G3', 19: 'J3', 24: 'N3' }
+      职能: { 2: 'A3', 5: 'D4', 8: 'G3', 11: 'J3', 14: 'N3', 17: 'Q3', 20: 'T3', 23: 'W8', 26: 'Y2' },
+      现实: { 0: 'C4', 3: 'L11', 7: 'E2', 9: 'O4', 13: 'T6', 16: 'V2', 18: 'X3', 20: 'H5', 23: 'E3' },
+      异常: { 0: 'H4', 1: 'H3', 4: 'U2', 6: 'X2', 10: 'N1', 12: 'Q2', 16: 'L10', 18: 'G8', 22: 'A7' }
     };
 
     async function fetchJSON(filename) {
@@ -2589,6 +2604,12 @@
       };
       const TRACK_NAMES = ['职能', '现实', '异常'];
       const NUM_BOXES = 30;
+      const ARC_TRACKS_HELP_GENERAL = '每当你标记一格时，你必须从所有其他记录条的末尾划掉一格。';
+      const ARC_TRACK_HELP = {
+        职能: '每当你在职能记录条上标记一格时，将任意一项资质的「资质保证上限」提升1点，最高不超过9点。<br>当你获得任务MVP时，在你的职能记录条上标记1格，且无需从其他记录条上移除一格。',
+        现实: '每当你在现实记录条上标记一格时，将你与任意一段「关系」的「连结」提升1点。<br>当你既未获得任务MVP也未进入察看期时，你可以将你与任意一段关系的连结提升1点。',
+        异常: '每当你在异常记录条上标记一格时，选择一项：练习或广为人知。<br>• 练习：在任意一项异常能力上标记「熟练」。<br>• 广为人知：从一项异常能力中移除「熟练」标记，并向你的团队提出该能力的问题。在获得最多票数的答案轨道上做标记，然后获得所有已解锁的能力。<br>当你进入察看期时，在你的异常记录条上标记1格，且无需从其他记录条上移除一格。'
+      };
       function boxState(name, i) {
         const track = wallTracks[name] || { marked: 0, struck: 0 };
         const marked = Math.max(0, parseInt(track.marked, 10) || 0);
@@ -2614,6 +2635,7 @@
         return `
           <div class="arc-track ${name}">
             <div class="arc-track-name">${name}</div>
+            <div class="arc-track-help">${ARC_TRACK_HELP[name] || ''}</div>
             <div class="arc-track-bar">${cells}</div>
           </div>`;
       }
@@ -2621,6 +2643,7 @@
         <div class="agent-card-back-tracks">
           <div class="agent-card-back-title">轨道</div>
           <button type="button" class="agent-track-btn agent-track-btn-back">特工</button>
+          <p class="arc-tracks-help">${ARC_TRACKS_HELP_GENERAL}</p>
           ${TRACK_NAMES.map(bar).join('')}
         </div>`;
     }
