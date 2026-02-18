@@ -1283,6 +1283,203 @@
       box-shadow: 0 0 25px var(--glow-red-soft), 0 0 40px var(--glow-red-soft);
     }
 
+    .agent-card-flip {
+      perspective: 1000px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .agent-card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+      transition: transform 0.5s ease;
+      transform-style: preserve-3d;
+    }
+
+    .agent-card-flip.flipped .agent-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .agent-card-front,
+    .agent-card-back {
+      backface-visibility: hidden;
+    }
+
+    .agent-card-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 0 25px var(--glow-red-soft);
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .agent-card-back .agent-track-btn-back {
+      position: static;
+      top: auto;
+      left: auto;
+      width: auto;
+      margin-bottom: 1rem;
+      padding: 0.35rem 0.6rem;
+      border-bottom: none;
+      display: inline-block;
+    }
+    .agent-card-back .agent-track-btn-back::after {
+      content: ' ↺';
+      opacity: 0.9;
+    }
+
+    .agent-card-back-tracks {
+      margin-top: 0;
+      min-width: 0;
+    }
+
+    .agent-card-back-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-red);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arc-track {
+      margin-bottom: 1rem;
+      min-width: 0;
+    }
+
+    .arc-track:last-child {
+      margin-bottom: 0;
+    }
+
+    .arc-track-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .arc-track.职能 .arc-track-name { color: var(--arc-competency); }
+    .arc-track.现实 .arc-track-name { color: var(--arc-reality); }
+    .arc-track.异常 .arc-track-name { color: var(--arc-anomaly); }
+
+    /* Horizontal track: 30 boxes, wrap to next line when needed; responsive box size */
+    .arc-track-bar {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      row-gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .arc-track-cell {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .arc-track-connector {
+      flex-shrink: 0;
+      background: currentColor;
+      opacity: 0.6;
+    }
+
+    .arc-track-connector.h {
+      width: clamp(3px, 0.8vw, 6px);
+      height: 2px;
+      min-width: 3px;
+    }
+
+    .arc-track.职能 .arc-track-connector.h { color: var(--arc-competency); }
+    .arc-track.现实 .arc-track-connector.h { color: var(--arc-reality); }
+    .arc-track.异常 .arc-track-connector.h { color: var(--arc-anomaly); }
+
+    .arc-track-bar .tracker-step {
+      width: clamp(22px, 5vw, 40px);
+      height: clamp(22px, 5vw, 40px);
+      min-width: 22px;
+      min-height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .arc-track.职能 .arc-track-bar .tracker-step { border-color: rgba(196, 30, 58, 0.5); }
+    .arc-track.现实 .arc-track-bar .tracker-step { border-color: rgba(218, 165, 32, 0.5); }
+    .arc-track.异常 .arc-track-bar .tracker-step { border-color: rgba(46, 77, 146, 0.5); }
+
+    .arc-track.职能 .arc-track-bar .tracker-step.filled { border-color: var(--arc-competency); background: rgba(196, 30, 58, 0.35); color: var(--arc-competency); }
+    .arc-track.现实 .arc-track-bar .tracker-step.filled { border-color: var(--arc-reality); background: rgba(218, 165, 32, 0.35); color: var(--arc-reality); }
+    .arc-track.异常 .arc-track-bar .tracker-step.filled { border-color: var(--arc-anomaly); background: rgba(46, 77, 146, 0.35); color: var(--arc-anomaly); }
+
+    .arc-track.职能 .arc-track-bar .tracker-step.struck { border-color: var(--arc-competency); background: var(--bg-dark); color: var(--text-secondary); }
+    .arc-track.现实 .arc-track-bar .tracker-step.struck { border-color: var(--arc-reality); background: var(--bg-dark); color: var(--text-secondary); }
+    .arc-track.异常 .arc-track-bar .tracker-step.struck { border-color: var(--arc-anomaly); background: var(--bg-dark); color: var(--text-secondary); }
+
+    .arc-track-bar .tracker-step.struck::after {
+      content: '✕';
+      position: absolute;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .arc-track-bar .tracker-step.struck .tracker-step-inner {
+      display: none;
+    }
+
+    .arc-track-bar .tracker-step .tracker-step-inner {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .agent-track-btn {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      z-index: 2;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.75rem;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--accent-red);
+      background: rgba(196, 30, 58, 0.15);
+      border: 1px solid rgba(196, 30, 58, 0.5);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 6px var(--glow-red-soft);
+    }
+
+    .agent-track-btn:hover {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 10px var(--glow-red-soft);
+    }
+
+    .agent-track-btn::after {
+      content: ' ↺';
+      opacity: 0.9;
+    }
+
     .agent-badges {
       position: absolute;
       top: 0.5rem;
@@ -2114,11 +2311,11 @@
         display: block;
       }
 
-      .agents-grid .agent-card {
+      .agents-grid .agent-card-flip {
         display: none;
       }
 
-      .agents-grid .agent-card.mobile-visible {
+      .agents-grid .agent-card-flip.mobile-visible {
         display: block;
       }
     }
@@ -2310,6 +2507,13 @@
   <script>
     const BASE = (window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '') || '.') + '/data';
 
+    /** Playwall document ref numbers on certain boxes (0-based index) for each track. 30 boxes per track. */
+    const WALL_TRACK_REFS = {
+      异常: { 4: 'A3', 9: 'D4', 14: 'G3', 19: 'J3', 24: 'N3' },
+      现实: { 4: 'E3', 9: 'H5', 14: 'X3', 19: 'V2', 24: 'L11' },
+      职能: { 4: 'A3', 9: 'D4', 14: 'G3', 19: 'J3', 24: 'N3' }
+    };
+
     async function fetchJSON(filename) {
       const res = await fetch(`${BASE}/${filename}`);
       if (!res.ok) throw new Error(`加载失败: ${res.status}`);
@@ -2375,6 +2579,50 @@
       steps += '<div class="tracker-connector"></div>';
       steps += `<div class="tracker-end${n >= 4 ? ' failed' : ''}">✕</div>`;
       return `<div class="reality-split-tracker">${steps}</div>`;
+    }
+
+    function buildArcTrackersHtml(agent) {
+      const wallTracks = agent.wallTracks || {
+        异常: { marked: 0, struck: 0 },
+        现实: { marked: 0, struck: 0 },
+        职能: { marked: 0, struck: 0 }
+      };
+      const TRACK_NAMES = ['职能', '现实', '异常'];
+      const NUM_BOXES = 30;
+      function boxState(name, i) {
+        const track = wallTracks[name] || { marked: 0, struck: 0 };
+        const marked = Math.max(0, parseInt(track.marked, 10) || 0);
+        const struck = Math.max(0, parseInt(track.struck, 10) || 0);
+        const filled = i < marked;
+        const struckFromEnd = i >= NUM_BOXES - struck;
+        return { filled, struck: struckFromEnd };
+      }
+      function oneBox(name, i) {
+        const refs = WALL_TRACK_REFS[name] || {};
+        const ref = refs[i];
+        const { filled, struck } = boxState(name, i);
+        const cls = ['tracker-step', filled ? 'filled' : '', struck ? 'struck' : '', ref ? 'ref' : ''].filter(Boolean).join(' ');
+        const inner = ref ? escapeHtml(ref) : '';
+        return `<div class="${cls}" data-idx="${i}"><span class="tracker-step-inner">${inner}</span></div>`;
+      }
+      function bar(name) {
+        let cells = '';
+        for (let i = 0; i < NUM_BOXES; i++) {
+          const conn = i < NUM_BOXES - 1 ? '<div class="arc-track-connector h" aria-hidden="true"></div>' : '';
+          cells += `<div class="arc-track-cell">${oneBox(name, i)}${conn}</div>`;
+        }
+        return `
+          <div class="arc-track ${name}">
+            <div class="arc-track-name">${name}</div>
+            <div class="arc-track-bar">${cells}</div>
+          </div>`;
+      }
+      return `
+        <div class="agent-card-back-tracks">
+          <div class="agent-card-back-title">轨道</div>
+          <button type="button" class="agent-track-btn agent-track-btn-back">特工</button>
+          ${TRACK_NAMES.map(bar).join('')}
+        </div>`;
     }
 
     function buildRefRealityHtml(agent) {
@@ -2505,8 +2753,9 @@
       if (agent.socks) badgesHtml.push('<img class="agent-badge-img" src="assets/socks.png" alt="socks" />');
       const badgesEl = badgesHtml.length ? `<div class="agent-badges">${badgesHtml.join('')}</div>` : '';
 
-      return `
+      const cardInner = `
         <div class="agent-card">
+          <button type="button" class="agent-track-btn" aria-label="翻转查看轨道">轨道</button>
           ${badgesEl}
           <div class="agent-card-header">
             <div class="agent-header-top">
@@ -2548,6 +2797,15 @@
               ${itemsHtml}
             </div>
             ` : ''}
+          </div>
+        </div>`;
+
+      const backHtml = buildArcTrackersHtml(agent);
+      return `
+        <div class="agent-card-flip">
+          <div class="agent-card-inner">
+            <div class="agent-card-front">${cardInner}</div>
+            <div class="agent-card-back">${backHtml}</div>
           </div>
         </div>
       `;
@@ -2630,7 +2888,7 @@
 
       const cardsHtml = agentIndexPairs.map((p, i) => {
         const card = renderAgent(p.agent);
-        return card.replace('<div class="agent-card">', `<div class="agent-card" data-agent-index="${p.index}" data-tab-index="${i}">`);
+        return card.replace('<div class="agent-card-flip">', `<div class="agent-card-flip" data-agent-index="${p.index}" data-tab-index="${i}">`);
       }).join('');
 
       content.innerHTML = `
@@ -2644,17 +2902,17 @@
             const tabIndex = parseInt(tab.dataset.tabIndex);
             content.querySelectorAll('.agent-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            content.querySelectorAll('.agents-grid .agent-card').forEach(card => {
+            content.querySelectorAll('.agents-grid .agent-card-flip').forEach(card => {
               const cardTabIdx = parseInt(card.dataset.tabIndex);
               card.classList.toggle('mobile-visible', cardTabIdx === tabIndex);
             });
           });
         });
-        content.querySelectorAll('.agents-grid .agent-card').forEach((card, i) => {
+        content.querySelectorAll('.agents-grid .agent-card-flip').forEach((card, i) => {
           card.classList.toggle('mobile-visible', i === 0);
         });
       } else if (window.matchMedia('(max-width: 768px)').matches && !hasSelection) {
-        content.querySelectorAll('.agents-grid .agent-card').forEach(card => {
+        content.querySelectorAll('.agents-grid .agent-card-flip').forEach(card => {
           card.classList.add('mobile-visible');
         });
       }
@@ -2698,6 +2956,20 @@
         allAgents = Array.isArray(data.agents) ? data.agents : [];
         renderAgentSelect();
         renderContent();
+        if (!content._arcTrackBound) {
+          content._arcTrackBound = true;
+          content.addEventListener('click', function (e) {
+            const flip = e.target.closest('.agent-card-flip');
+            if (!flip) return;
+            const idx = parseInt(flip.dataset.agentIndex, 10);
+            if (Number.isNaN(idx)) return;
+            const agent = allAgents[idx];
+            if (!agent) return;
+            if (e.target.closest('.agent-track-btn')) {
+              flip.classList.toggle('flipped');
+            }
+          });
+        }
       } catch (err) {
         content.innerHTML = `<div class="error">${escapeHtml(err.message)}</div>`;
       }
